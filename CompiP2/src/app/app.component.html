@@ -1,0 +1,83 @@
+
+
+<ul class="nav grey lighten-4 py-4">
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#!">Organización de Lenguajes y 
+      Compiladores 1</a>
+</li>
+
+<li class="nav-item dropdown" dropdown  >
+  <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+    Funcionalidades<span class="caret"></span></a>
+  <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Crear archivos</a>
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Abrir archivos</a>
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Guardar el archivo</a>
+    <div class="divider dropdown-divider"></div>
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Eliminar pestaña</a>
+  </div>
+</li>
+
+<li class="nav-item dropdown" dropdown  >
+  <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+    Reporte de Errores<span class="caret"></span></a>
+  <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores léxico</a>
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores sintáctico</a>
+    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores el semántico</a>
+    </div>
+</li>
+
+  <li class="nav-item">
+    <button mdbBtn (click)="ejecutar()" type="button" color="success" rounded="true" outline="true" mdbWavesEffect>Ejecutar</button>
+  </li>
+  <li class="nav-item">
+  <button mdbBtn type="button" color="info" rounded="true" outline="true" mdbWavesEffect>Generar Árbol AST</button>
+</li>
+<li class="nav-item">
+<button mdbBtn type="button" color="default" rounded="true" outline="true" mdbWavesEffect>Tabla de Símbolos</button>
+</li>
+</ul>
+<br>
+<div class="container-fluid">
+<div class="row">
+  <div class="col-sm-6 mb-3 mb-md-0">
+    <mdb-card>
+      <mdb-card-body>
+        <mdb-card-title>
+          <h5>Entrada</h5>
+        </mdb-card-title>
+        <div class="col">
+          <ngx-codemirror
+          [(ngModel)]="entrada"
+          [options]="{
+          lineNumbers: true,
+          theme: 'material',
+          mode: 'javascript'
+          }"
+        ></ngx-codemirror>
+        </div>
+      </mdb-card-body>
+    </mdb-card>
+  </div>
+  <div class="col-sm-6">
+    <mdb-card>
+      <mdb-card-body>
+        <mdb-card-title>
+          <h5>Consola</h5>
+        </mdb-card-title>
+        <div class="col">
+          <ngx-codemirror
+          [(ngModel)]="consola"
+          [options]="{
+          lineNumbers: true,
+          theme: 'material',
+          mode: 'markdown'
+          }"
+        ></ngx-codemirror>
+        </div>
+      </mdb-card-body>
+    </mdb-card>
+  </div>
+</div>
+</div>
