@@ -24,7 +24,7 @@
   <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
     <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores léxico</a>
     <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores sintáctico</a>
-    <a class="dropdown-item waves-light" mdbWavesEffect href="#">Errores el semántico</a>
+    <a class="dropdown-item waves-light" (click)="openPage('TablaSim',2)"   mdbWavesEffect href="#">Errores el semántico</a>
     </div>
 </li>
 
@@ -35,7 +35,7 @@
   <button mdbBtn type="button" color="info" rounded="true" outline="true" mdbWavesEffect>Generar Árbol AST</button>
 </li>
 <li class="nav-item">
-<button mdbBtn type="button" color="default" rounded="true" outline="true" mdbWavesEffect>Tabla de Símbolos</button>
+<button mdbBtn   (click)="openPage('TablaSim',1)"  type="button" color="default" rounded="true" outline="true" mdbWavesEffect>Tabla de Símbolos</button>
 </li>
 </ul>
 <br>
@@ -80,4 +80,14 @@
     </mdb-card>
   </div>
 </div>
+
+<br>
+  <div id="TablaSim" class="tabcontent" style="background-color: #1b1d1c;">
+    <table mdbTable id= "tablasimbols" style="width:100%" bordered="true">
+    
+    </table>
+  </div>
 </div>
+
+ 
+<script type="text/javascript"></script>

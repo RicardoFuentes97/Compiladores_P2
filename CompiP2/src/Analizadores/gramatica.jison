@@ -104,6 +104,12 @@ caracter     (\'({escape2}|{aceptada2})\')
     const relacional = require('../Clases/Expreciones/Operaciones/Relaciones');
     const logica = require('../Clases/Expreciones/Operaciones/Logicas');
     const primitivo= require('../Clases/Expreciones/Primitivo');
+
+    const ast =require('../Clases/AST/Ast');
+    const declaracion = require ('../Clases/Instrucciones/Declaracion');
+    const asignacion = require ('../Clases/Instrucciones/Asignacion');
+    const simbolo= require ('../Clases/TablaSimbolos/Simbolos');
+    const tipo= require ('../Clases/TablaSimbolos/Tipo');
 %}
 
 /* Precedencia de operadores */
@@ -124,15 +130,37 @@ caracter     (\'({escape2}|{aceptada2})\')
 
 
 inicio
-    : instrucciones EOF { $$ = $1;  return $$; }
+    : instrucciones EOF { console.log($1); $$= new ast.default($1);  return $$; }
     ;
 
 instrucciones : instrucciones instruccion   { $$ = $1; $$.push($2); }
             | instruccion                   {$$= new Array(); $$.push($1); }
             ;
 
-instruccion :   e  PYC { $$ = new evaluar.default($1); }
+instruccion :  declaracion {$$ = $1; }
+            |  asignacion  {$$ = $1; }
             ;
+
+asignacion : ID IGUAL e PYC   { $$ = new asignacion.default($1,$3, @1.first_line, @1.last_column); }
+            ; 
+
+declaracion : tipo lista_simbolos PYC   { $$ = new declaracion.default($1, $2, @1.first_line, @1.last_column); }
+            ; 
+
+lista_simbolos : lista_simbolos COMA ID          { $$ = $1; $$.push(new simbolo.default(1,null,$3, null)); }
+            | lista_simbolos COMA ID IGUAL e     { $$ = $1; $$.push(new simbolo.default(1,null,$3, $5)); }
+            | ID                                 { $$ = new Array(); $$.push(new simbolo.default(1,null,$1, null)); }
+            | ID IGUAL e                         { $$ = new Array(); $$.push(new simbolo.default(1,null,$1, $3)); }
+            ; 
+
+tipo : INT      { $$ = new tipo.default('ENTERO'); }
+    | DOUBLE    { $$ = new tipo.default('DOBLE'); }
+    | STRING    { $$ = new tipo.default('STRING'); }
+    | CHAR      { $$ = new tipo.default('CHAR'); }
+    | BOOLEAN   { $$ = new tipo.default('BOOLEAN'); }
+    ; 
+
+
 
 e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line, $1.last_column, false);}
     | e MENOS e         {$$ = new aritmetica.default($1, '-', $3, $1.first_line, $1.last_column, false);}
