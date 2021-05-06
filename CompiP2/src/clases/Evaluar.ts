@@ -1,10 +1,10 @@
 export default class Evaluar{
-    public resultado:  number;
+    public resultado:  any;
 
-    constructor(resultado: number){
+    constructor(resultado: any){
         this.resultado=resultado;
     }
-    ger_resultado():number{
+    get_Resultado():number{
         return this.resultado;
     }
 }

@@ -1,4 +1,3 @@
-import { relative } from "node:path";
 import Nodo from "../AST/Nodo";
 import Controlador from "../Controlador";
 import { Expreciones } from "../Interfaces.ts/Expreciones";
@@ -22,7 +21,7 @@ export default class Primitivo implements Expreciones{
     getTipo(controlador: Controlador, ts: TablaSimbolos) {
         let valor= this.getValor(controlador,ts);
         if(typeof valor== 'number'){
-            return tipo.DOUBLE;
+            return tipo.DOBLE;
         }else if (typeof valor=='string'){
             return tipo.CADENA;
         }else if (typeof valor== 'boolean'){

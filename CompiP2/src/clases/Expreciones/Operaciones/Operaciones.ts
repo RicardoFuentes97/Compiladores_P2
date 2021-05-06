@@ -8,16 +8,21 @@ export enum Operador {
     RESTA,
     MULTI,
     DIV,
+    POT,
+    MODULO,
     MENORQUE,
     MAYORQUE,
     AND,
     NOT,
     UNARIO,
     IGUALIGUAL,
-    MAYORIGUAL
+    MAYORIGUAL,
+    DIFERENTE,
+    MENORIGUAL,
+    OR
 }
 
-export default class Operacion implements Expreciones {
+export default class Operaciones implements Expreciones {
 
     public exp1 : Expreciones;
     public exp2 : Expreciones;
@@ -58,6 +63,16 @@ export default class Operacion implements Expreciones {
             return Operador.IGUALIGUAL;
         }else if(op == '>='){
             return Operador.MAYORIGUAL;
+        }else if(op == '^'){
+            return Operador.POT;
+        }else if(op== '%'){
+            return Operador.MODULO;
+        }else if (op=='!='){
+            return Operador.DIFERENTE;
+        }else if( op == '<='){
+            return Operador.MENORIGUAL;
+        }else if ( op == '||'){
+            return Operador.OR;
         }
     }
 

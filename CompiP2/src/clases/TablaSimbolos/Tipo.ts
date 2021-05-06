@@ -1,6 +1,6 @@
 export enum tipo{
     ENTERO,
-    DOUBLE,
+    DOBLE,
     BOOLEANO,
     CARACTER,
     CADENA
