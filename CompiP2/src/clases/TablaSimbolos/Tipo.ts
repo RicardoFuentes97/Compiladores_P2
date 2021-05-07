@@ -15,7 +15,7 @@ export default class Tipo{
         this.stype = stype;
         this.type = this.getTipo(stype);
     }
-    
+
     getTipo(stype: string): tipo{
         if(stype == 'DOBLE'){
             return tipo.DOBLE;
@@ -27,6 +27,8 @@ export default class Tipo{
             return tipo.BOOLEANO;
         }else if(stype == 'VOID'){
             return tipo.VOID;
+        }else if (stype == 'CHAR'){
+            return tipo.CARACTER;
         }
     }
 

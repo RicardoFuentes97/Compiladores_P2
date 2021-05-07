@@ -4,7 +4,7 @@ import Controlador from "../Controlador";
 import { Instruccion } from "../Interfaces.ts/Instruccion";
 import Simbolos from "../TablaSimbolos/Simbolos";
 import { TablaSimbolos } from "../TablaSimbolos/TablaSimbolos";
-import Tipo from "../TablaSimbolos/Tipo";
+import Tipo, { tipo } from "../TablaSimbolos/Tipo";
 
 
 export default class Declaracion implements Instruccion{
@@ -37,9 +37,26 @@ export default class Declaracion implements Instruccion{
             if(variable.valor!=null){
                 let valor=variable.valor.getValor(controlador,ts);
 
-                let nuevo_simb =new Simbolos(variable.simbolo,this.type,variable.identificador,valor);
-                ts.agregar(variable.identificador,nuevo_simb);
-                
+                let tipo_valor = variable.valor.getTipo(controlador,ts);
+                console.log(tipo_valor, this.type.type);
+                if(tipo_valor == this.type.type || (tipo_valor == tipo.DOBLE && this.type.type == tipo.ENTERO)  ){
+                    let nuevo_simb =new Simbolos(variable.simbolo,this.type,variable.identificador,valor);
+                    ts.agregar(variable.identificador,nuevo_simb);   
+                }else if(tipo_valor == tipo.CADENA && this.type.type== tipo.CARACTER){
+                    if(valor.length==1){
+                        let nuevo_simb =new Simbolos(variable.simbolo,this.type,variable.identificador,valor);
+                        ts.agregar(variable.identificador,nuevo_simb); 
+                    }else{
+                        let error = new Errores('Semantico', `La variable ${variable.identificador} no se le puede asignar el valor \"${valor}\" por que son de distinto tipo.`, this.linea, this.columna);
+                        controlador.errores.push(error);
+                        controlador.append(`Error Semantico : La variable ${variable.identificador} no se le puede asignar el valor \"${valor}\" por que son de distinto tipo. En la linea ${this.linea} y columan ${this.columna}`);
+                    }
+                }else{
+                    let error = new Errores('Semantico', `La variable ${variable.identificador} no se le puede asignar el valor \"${valor}\" por que son de distinto tipo.`, this.linea, this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`Error Semantico : La variable ${variable.identificador} no se le puede asignar el valor \"${valor}\" por que son de distinto tipo. En la linea ${this.linea} y columan ${this.columna}`);
+                }
+            
             }else{
                 let nuevo_simb =new Simbolos(variable.simbolo,this.type,variable.identificador,null);
                 ts.agregar(variable.identificador,nuevo_simb);

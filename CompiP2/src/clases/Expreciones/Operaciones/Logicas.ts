@@ -2,6 +2,7 @@ import Nodo from "src/clases/AST/Nodo";
 import Controlador from "src/clases/Controlador";
 import { Expreciones } from "src/clases/Interfaces.ts/Expreciones";
 import { TablaSimbolos } from "src/clases/TablaSimbolos/TablaSimbolos";
+import { tipo } from "src/clases/TablaSimbolos/Tipo";
 import Operaciones, { Operador } from "./Operaciones";
 
 
@@ -11,9 +12,18 @@ export default class Logicas extends Operaciones implements Expreciones{
         super(exp1,op,exp2,linea,columna,expU);        
     }
 
-    getTipo(controlador: Controlador, TablaSimbolos: TablaSimbolos) {
-        throw new Error("Method not implemented.");
+    getTipo(controlador: Controlador, ts: TablaSimbolos) : tipo{
+        let valor = this.getValor(controlador, ts);
+
+        if(typeof valor === 'number'){   
+            return tipo.DOBLE;
+        }else if(typeof valor === 'string'){
+            return tipo.CADENA;
+        }else if(typeof valor === 'boolean'){
+            return tipo.BOOLEANO;
+        }
     }
+    
     getValor(controlador: Controlador, TablaSimbolos: TablaSimbolos) {
         let valor_exp1;
         let valor_exp2;

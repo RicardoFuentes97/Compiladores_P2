@@ -2,6 +2,7 @@ import Nodo from "src/clases/AST/Nodo";
 import Controlador from "src/clases/Controlador";
 import { Expreciones } from "src/clases/Interfaces.ts/Expreciones";
 import { TablaSimbolos } from "src/clases/TablaSimbolos/TablaSimbolos";
+import { tipo } from "src/clases/TablaSimbolos/Tipo";
 import Operaciones, { Operador } from "./Operaciones";
 
 
@@ -11,8 +12,16 @@ export default class Aritmetica extends Operaciones implements Expreciones {
     }
     
     
-    getTipo(controlador: Controlador, ts: TablaSimbolos) {
-        throw new Error("Method not implemented.");
+    getTipo(controlador: Controlador, ts: TablaSimbolos) : tipo{
+        let valor = this.getValor(controlador,ts);
+        
+        if(typeof valor == 'number'){
+            return tipo.DOBLE;
+        }else if(typeof valor == 'string'){
+            return tipo.CADENA;
+        }else if(typeof valor == 'boolean'){
+            return tipo.BOOLEANO;
+        }
     }
 
     getValor(controlador: Controlador, ts: TablaSimbolos) {
