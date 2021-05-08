@@ -11,7 +11,8 @@ export class Analizador {
             let ts_globla =new TablaSimbolos(null);
 
             ast.ejecutar(controlador,ts_globla);
-
+            controlador.ambito="Globlal";
+            controlador.graficarEntornos(controlador,ts_globla,"");
             let ts_html =controlador.graficar_ts(controlador,ts_globla);
             let error_html = controlador.graficar_Semantico (controlador,ts_globla);
             let retorno = {"errores":error_html,"ts": ts_html ,"consola":controlador.consola };

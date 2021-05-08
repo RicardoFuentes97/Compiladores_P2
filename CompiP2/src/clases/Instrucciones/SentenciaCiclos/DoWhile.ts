@@ -29,6 +29,7 @@ export default class DoWhile implements Instruccion{
                     let res = ins.ejecutar(controlador,ts_local);
                      //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
+                controlador.graficarEntornos(controlador,ts_local," (doWhile)");
             } while(this.condicion.getValor(controlador,ts));
         }
     }

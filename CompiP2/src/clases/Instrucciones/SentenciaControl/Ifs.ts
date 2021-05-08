@@ -33,11 +33,13 @@ export default class Ifs implements Instruccion{
                     let res = ins.ejecutar(controlador, ts_local);
                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
+                controlador.graficarEntornos(controlador,ts_local," (IF)");
             }else{
                 for(let ins of this.lista_elses){
                     let res = ins.ejecutar(controlador,ts_local);
                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
+                controlador.graficarEntornos(controlador,ts_local," (IF)");
             }
         }
         return null;

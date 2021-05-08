@@ -5,9 +5,12 @@ import { TablaSimbolos } from "./TablaSimbolos/TablaSimbolos";
 export default class Controlador{
     public errores: Array<Errores>;
     public consola: string;
+    public ambito: string;
+    public cuerpo: string;
     constructor (){
         this.errores = new  Array<Errores>();
         this.consola ="";
+        this.cuerpo;
     }
 
     public append (consola: string){
@@ -17,24 +20,21 @@ export default class Controlador{
     graficar_ts(controlador:Controlador, ts:TablaSimbolos):string{
         var cuerpohtml = "<thead class=\"black white-text\"><tr><td colspan=\"6\">Tabla de Simbolos </td></tr><tr><th>Rol</th><th>Nombre</th><th>Tipo</th><th>Ambito</th><th>Valor</th><th>Parametros</th></tr></thead>";
 
-        while(ts != null){
-
-            for(let sim of ts.tabla.values()){
-                console.log(`simbolo`);
-                
-                cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" +  this.getRol(sim) + "</th><td>" + sim.identificador + 
-                "</td><td>" + this.getTipo(sim) +"</td>"  + 
-                "</td><td>" + this.getAmbito() + 
-                "</td><td>" + this.getValor(sim) + 
-                "</td><td>" + this.parametros(sim) +"</td>" +  "</tr>";
-            }
-            
-            
-            ts = ts.ant;
-        }
-        
+        cuerpohtml+=this.cuerpo;
         
         return cuerpohtml;
+    }
+
+    graficarEntornos(controlador:Controlador, ts:TablaSimbolos,ubicacion:string){
+        var cuerpohtml="";
+        for(let sim of ts.tabla.values()){
+            cuerpohtml += "<tr mdbTableCol class=\"grey lighten-1 black-text\"><th scope=\"row\">" +  this.getRol(sim) + "</th><td>" + sim.identificador + 
+            "</td><td>" + this.getTipo(sim) +"</td>"  + 
+            "</td><td>" + this.ambito+ ubicacion + 
+            "</td><td>" + this.getValor(sim) + 
+            "</td><td>" + this.parametros(sim) +"</td>" +  "</tr>";
+        }
+        this.cuerpo=cuerpohtml+this.cuerpo;
     }
 
     graficar_Semantico(controlador:Controlador, ts:TablaSimbolos):string{

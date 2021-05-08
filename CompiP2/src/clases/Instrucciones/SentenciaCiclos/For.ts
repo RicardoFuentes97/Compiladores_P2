@@ -39,10 +39,12 @@ export default class For implements Instruccion{
                     let res = ins.ejecutar(controlador,ts_local);
                      //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
+                controlador.graficarEntornos(controlador,ts_local," (FOR)");
 
                 this.fin.ejecutar(controlador,ts_for);
             }
         }
+        controlador.graficarEntornos(controlador,ts_for," (FOR)");
     }
     
     recorrer(): Nodo {

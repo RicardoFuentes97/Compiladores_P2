@@ -32,6 +32,7 @@ export default class While implements Instruccion{
                     let res = ins.ejecutar(controlador,ts_local);
                      //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
+                controlador.graficarEntornos(controlador,ts_local," (While)");
             }
         }
     }
