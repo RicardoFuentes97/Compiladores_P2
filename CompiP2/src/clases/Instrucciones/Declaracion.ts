@@ -67,7 +67,14 @@ export default class Declaracion implements Instruccion{
         
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Declaraciones","");
+        for(let simbolo of this.lista_simbolos){
+           let  p = new Nodo("Declaracion","");
+           p.AddHijo(new Nodo(simbolo.identificador,""));
+           p.AddHijo(new Nodo(";",""));
+           padre.AddHijo(p);
+        }
+        return padre;
     }
 
 }

@@ -20,4 +20,17 @@ export class Analizador {
             return retorno;
         
     }
+    public recorrer(input){
+
+        try {
+            let ast = sintactico.parse(input);
+            let nodo_ast = ast.recorrer();
+
+            return nodo_ast;
+            
+        } catch (error) {
+            
+        }
+    }
+
 }

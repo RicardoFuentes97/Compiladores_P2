@@ -53,7 +53,12 @@ export default class Asignacion implements Instruccion {
     }
 
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Asignacion","");
+           padre.AddHijo(new Nodo(this.identificador,""));
+           padre.AddHijo(new Nodo("=",""));
+           padre.AddHijo(this.valor.recorrer());
+        
+        return padre;
     }
 
 }

@@ -81,6 +81,12 @@ caracter     (\'({escape2}|{aceptada2})\')
 "exec"                  { console.log("Reconocio : "+ yytext); return 'EXEC'}
 "do"                    { console.log("Reconocio : "+ yytext); return 'DO'}
 "for"                   { console.log("Reconocio : "+ yytext); return 'FOR'}
+"break"                 { console.log("Reconocio : "+ yytext); return 'BREAK'}
+"continue"              { console.log("Reconocio : "+ yytext); return 'CONTINUE'}
+"return"                { console.log("Reconocio : "+ yytext); return 'RETURN'}
+"switch"                { console.log("Reconocio : "+ yytext); return 'SWITCH'}
+"case"                  { console.log("Reconocio : "+ yytext); return 'CASE'}
+"default"               { console.log("Reconocio : "+ yytext); return 'DEFAULT'}
 
 
 /* SIMBOLOS ER */
@@ -97,7 +103,13 @@ caracter     (\'({escape2}|{aceptada2})\')
 <<EOF>>               return 'EOF'
 
 /* Errores lexicos */
-.                     return 'ERROR'
+.                     { console.log("Error Lexico "+yytext
+                        +" linea "+yylineno
+                        +" columna "+(yylloc.last_column+1));
+
+                        
+                                      
+                        }
 
 /lex
 
@@ -124,6 +136,13 @@ caracter     (\'({escape2}|{aceptada2})\')
     const For =require ('../Clases/Instrucciones/SentenciaCiclos/For');
     const simbolo= require ('../Clases/TablaSimbolos/Simbolos');
     const tipo= require ('../Clases/TablaSimbolos/Tipo');
+
+    const detener = require ('../Clases/Instrucciones/SentenciaTransferencia/Break');
+    const continuar = require ('../Clases/Instrucciones/SentenciaTransferencia/continuar');
+    const retornar = require ('../Clases/Instrucciones/SentenciaTransferencia/retornar');
+
+    const sw = require ('../Clases/Instrucciones/SentenciaControl/SW');
+    const cs = require ('../Clases/Instrucciones/SentenciaControl/CS');
 %}
 
 /* Precedencia de operadores */
@@ -162,10 +181,31 @@ instruccion :  declaracion {$$ = $1; }
             |  funciones   { $$ = $1; }
             |  llamada PYC { $$ = $1; }
             |  EXEC llamada PYC { $$ = new ejecutar.default($2, @1.first_line, @1.last_column); }
+            |  BREAK PYC {$$ = new detener.default()}
+            |  CONTINUE PYC {$$ = new continuar.default()}
+            | RETURN PYC { $$ = new retornar.default(null)}
+            | RETURN e PYC { $$ = new retornar.default($2)}
+            | sw {$$=$1}
+            | error         { console.log("Error Sintactico" + yytext 
+                                    + "linea: " + this._$.first_line 
+                                    + "columna: " + this._$.first_column); 
+                        
+                                          
+                            }
             ;
 
-funciones : VOID ID PARA PARC LLAVA instrucciones LLAVC     { $$ = new funcion.default(3, new tipo.default('VOID'), $2.toLowerCase() , [], true, $6, @1.first_line, @1.last_column ); }
-            |VOID ID PARA lista_parametros PARC LLAVA instrucciones LLAVC  { $$ = new funcion.default(3, new tipo.default('VOID'), $2.toLowerCase() , $4, true, $7, @1.first_line, @1.last_column ); }
+sw: SWITCH PARA e PARC LLAVA lista_case  LLAVC {$$=new sw.default($3,$6,[])}
+    |SWITCH PARA e PARC LLAVA lista_case DEFAULT DSPNTS instrucciones LLAVC {$$=new sw.default($3,$6,$9)}
+    ;
+
+
+lista_case : lista_case CASE e DSPNTS instrucciones     { $$ = $1; $$.push(new cs.default($3,$5)); }
+                | CASE e DSPNTS instrucciones           { $$ = new Array(); $$.push(new cs.default($2,$4)); }
+                ;
+
+
+funciones : tipo ID PARA PARC LLAVA instrucciones LLAVC     { $$ = new funcion.default(3, $1, $2.toLowerCase() , [], true, $6, @1.first_line, @1.last_column ); }
+            |tipo ID PARA lista_parametros PARC LLAVA instrucciones LLAVC  { $$ = new funcion.default(3, $1, $2.toLowerCase() , $4, true, $7, @1.first_line, @1.last_column ); }
             ;
 
 lista_parametros : lista_parametros COMA tipo ID    { $$ = $1; $$.push(new simbolo.default(6,$3, $4.toLowerCase() , null)); }
@@ -222,6 +262,7 @@ tipo : INT      { $$ = new tipo.default('ENTERO'); }
     | STRING    { $$ = new tipo.default('STRING'); }
     | CHAR1      { $$ = new tipo.default('CHAR'); }
     | BOOLEAN   { $$ = new tipo.default('BOOLEAN'); }
+    | VOID   { $$ = new tipo.default('VOID'); }
     ; 
 
 
@@ -253,4 +294,6 @@ e : e MAS e             {$$ = new aritmetica.default($1, '+', $3, $1.first_line,
     | e INTERROGACION e DSPNTS e {$$ = new ternario.default($1, $3, $5, @1.first_line, @1.last_column); } 
     | ID INCRE          {$$ = new aritmetica.default(new identificador.default($1.toLowerCase() , @1.first_line, @1.last_column), '+',new primitivo.default(Number(1), $1.first_line, $1.last_column), $1.first_line, $1.last_column, false);}
     | ID DECRE          {$$ = new aritmetica.default(new identificador.default($1.toLowerCase() , @1.first_line, @1.last_column), '-',new primitivo.default(Number(1), $1.first_line, $1.last_column), $1.first_line, $1.last_column, false);}
+    |ID PARA PARC       { $$ = new llamada.default($1.toLowerCase() , [],@1.first_line, @1.last_column ); }
+    |ID PARA lista_exp PARC { $$ = new llamada.default($1.toLowerCase() , $3 ,@1.first_line, @1.last_column ); }
     ;

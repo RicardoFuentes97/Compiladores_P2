@@ -30,6 +30,9 @@ export default class Operaciones implements Expreciones {
     public operador : Operador;
     public linea: number;
     public columna: number;
+    public op:string;
+
+
 
     constructor (exp1 : Expreciones,operador : string ,exp2 : Expreciones,linea: number,columna: number,expU : boolean){
         this.exp1=exp1;
@@ -37,6 +40,7 @@ export default class Operaciones implements Expreciones {
         this.columna=columna;
         this.linea=linea;
         this.expU=expU;
+        this.op=operador;
         this.operador=this.getOperador(operador);
     }
 

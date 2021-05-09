@@ -4,6 +4,9 @@ import { Expreciones } from "src/clases/Interfaces.ts/Expreciones";
 import { Instruccion } from "src/clases/Interfaces.ts/Instruccion";
 import { TablaSimbolos } from "src/clases/TablaSimbolos/TablaSimbolos";
 import { tipo } from "src/clases/TablaSimbolos/Tipo";
+import Detener from "../SentenciaTransferencia/Break";
+import Continuar from "../SentenciaTransferencia/continuar";
+import retornar from "../SentenciaTransferencia/retornar";
 
 
 export default class Ifs implements Instruccion{
@@ -31,12 +34,43 @@ export default class Ifs implements Instruccion{
             if(valor_condicion){
                 for(let ins of this.lista_ifs){
                     let res = ins.ejecutar(controlador, ts_local);
+
+                    if( ins instanceof Detener || res instanceof Detener){
+                        controlador.graficarEntornos(controlador,ts_local," (While)");
+                        return res;
+                    }else{
+                        if(ins instanceof Continuar || res instanceof Continuar){
+                            controlador.graficarEntornos(controlador,ts_local," (While)");
+                            return res;
+                        }else{
+                            if( ins instanceof retornar || res instanceof retornar){
+                                controlador.graficarEntornos(controlador,ts_local," (While)");
+                                return res;
+                            }
+                        }
+                    }
                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
                 controlador.graficarEntornos(controlador,ts_local," (IF)");
             }else{
                 for(let ins of this.lista_elses){
                     let res = ins.ejecutar(controlador,ts_local);
+                   
+                        if( ins instanceof Detener || res instanceof Detener){
+                            controlador.graficarEntornos(controlador,ts_local," (While)");
+                            return res;
+                        }else{
+                            if(ins instanceof Continuar || res instanceof Continuar){
+                                controlador.graficarEntornos(controlador,ts_local," (While)");
+                                return res;
+                            }else{
+                                if( ins instanceof retornar || res instanceof retornar){
+                                    controlador.graficarEntornos(controlador,ts_local," (While)");
+                                    return res;
+                                }
+                            }
+                        }
+                    
                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
                 }
                 controlador.graficarEntornos(controlador,ts_local," (IF)");
@@ -45,7 +79,26 @@ export default class Ifs implements Instruccion{
         return null;
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("SENTENCIA","");
+        padre.AddHijo(new Nodo("if",""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(this.condicion.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+        padre.AddHijo(new Nodo("{",""));
+        for(let ins of this.lista_ifs){
+            padre.AddHijo(ins.recorrer());
+        }
+        padre.AddHijo(new Nodo("}",""));
+        if(this.lista_elses.length>0){
+            padre.AddHijo(new Nodo("}",""));
+            padre.AddHijo(new Nodo("else",""));
+            padre.AddHijo(new Nodo("{",""));
+            for(let ins of this.lista_elses){
+                padre.AddHijo(ins.recorrer());
+            }
+            padre.AddHijo(new Nodo("}",""));
+        }
+        return padre;
     }
 
 }

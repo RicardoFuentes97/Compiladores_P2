@@ -23,7 +23,19 @@ export default class Ejecutar implements Instruccion{
     }
 
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("exec",""); 
+        padre.AddHijo(new Nodo(this.llamada.identificador,""));
+        padre.AddHijo(new Nodo("(",""));
+
+        for(let x=0; x<this.llamada.parametros.length;x++){
+            let hijo = new Nodo("Exp","");
+            hijo.AddHijo(this.llamada.parametros[x].recorrer());
+            padre.AddHijo(hijo);
+        }
+        //TODO: AGREGAR NODOS HIJOS DE PARAMETROS
+        
+        padre.AddHijo(new Nodo(")",""));
+        return padre;
     }
 
 }

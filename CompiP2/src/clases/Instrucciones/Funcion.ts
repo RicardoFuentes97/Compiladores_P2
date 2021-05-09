@@ -32,8 +32,8 @@ export default class Funcion extends Simbolos implements Instruccion{
             let r = ins.ejecutar(controlador,ts_local);
 
             if(r != null){
-            controlador.ambito="Funcion: \n"+this.identificador;
-            controlador.graficarEntornos(controlador,ts_local,"");
+                controlador.ambito="Funcion: \n"+this.identificador;
+                controlador.graficarEntornos(controlador,ts_local,"");
                 return r;
             }
 
@@ -44,7 +44,31 @@ export default class Funcion extends Simbolos implements Instruccion{
     }
 
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Funcion",""); 
+        padre.AddHijo(new Nodo(this.tipo.stype,""));
+        padre.AddHijo(new Nodo(this.identificador,""));
+
+        padre.AddHijo(new Nodo("(",""));
+
+        for(let x=0;x<this.lista_params.length;x++){
+            let hijo = new Nodo("Identificador","");
+            hijo.AddHijo(new Nodo(this.lista_params[x].identificador,""));
+            padre.AddHijo(hijo);
+        }
+
+        padre.AddHijo(new Nodo(")",""));
+
+        padre.AddHijo(new Nodo("{",""));
+
+        let hijo_instrucciones = new Nodo("Instrucciones","");
+        for(let inst of this.lista_instrucciones){
+            hijo_instrucciones.AddHijo(inst.recorrer());
+        }
+        
+        padre.AddHijo(hijo_instrucciones);
+        padre.AddHijo(new Nodo("}",""));
+        
+       return padre;
     }
 
 }

@@ -32,7 +32,7 @@
     <button mdbBtn (click)="ejecutar()" type="button" color="success" rounded="true" outline="true" mdbWavesEffect>Ejecutar</button>
   </li>
   <li class="nav-item">
-  <button mdbBtn type="button" color="info" rounded="true" outline="true" mdbWavesEffect>Generar Árbol AST</button>
+  <button mdbBtn (click)="openPage('ast',3)" type="button" color="info" rounded="true" outline="true" mdbWavesEffect>Generar Árbol AST</button>
 </li>
 <li class="nav-item">
 <button mdbBtn   (click)="openPage('TablaSim',1)"  type="button" color="default" rounded="true" outline="true" mdbWavesEffect>Tabla de Símbolos</button>
@@ -88,6 +88,12 @@
     </table>
   </div>
 </div>
+
+<br>
+  <div id="ast" class="tabcontent" style="background-color: #1b1d1c;">
+    <div class="overflow-auto" id="graph" style="text-align: center;"></div>
+  </div>
+
 
  
 <script type="text/javascript"></script>

@@ -4,6 +4,10 @@ import Evaluar from 'src/clases/Evaluar';
 import { TablaSimbolos } from 'src/clases/TablaSimbolos/TablaSimbolos';
 import * as Analizador from '../clases/Analizar'
 
+import {graphviz} from 'd3-graphviz';
+import {wasmFolder} from '@hpcc-js/wasm'
+import Nodo from 'src/clases/AST/Nodo';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -16,6 +20,18 @@ export class AppComponent {
 
   htmlts: string ="";
   htmlerrores: string ="";
+
+
+  recorrer(): void{
+    let ana = new Analizador.Analizador();
+    if(this.entrada != ""){
+      console.log("Vamos a graficar");
+      let nodo_ast: Nodo= ana.recorrer(this.entrada);
+      let grafo = nodo_ast.GraficarSintactico();  //Aqui tenemos la cadena de graphviz para graficar
+      wasmFolder('/assets/@hpcc-js/wasm/dist/');
+      graphviz('#graph').renderDot(grafo);
+    }
+  }
 
   ejecutar():void {
     let ana =new Analizador.Analizador();
@@ -37,7 +53,10 @@ export class AppComponent {
       document.getElementById("tablasimbols").innerHTML = this.htmlts;
     }else if (valor == 2){
       document.getElementById("tablasimbols").innerHTML = this.htmlerrores;
+    }else if(valor==3){
+      this.recorrer();
     }
+    
     // Hide all elements with class="tabcontent" by default */
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");

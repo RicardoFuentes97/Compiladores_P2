@@ -3,6 +3,9 @@ import Controlador from "src/clases/Controlador";
 import { Expreciones } from "src/clases/Interfaces.ts/Expreciones";
 import { Instruccion } from "src/clases/Interfaces.ts/Instruccion";
 import { TablaSimbolos } from "src/clases/TablaSimbolos/TablaSimbolos";
+import Detener from "../SentenciaTransferencia/Break";
+import Continuar from "../SentenciaTransferencia/continuar";
+import retornar from "../SentenciaTransferencia/retornar";
 
 
 export default class While implements Instruccion{
@@ -30,7 +33,20 @@ export default class While implements Instruccion{
 
                 for(let ins of this.lista_instrucciones){
                     let res = ins.ejecutar(controlador,ts_local);
-                     //TODO verificar si res es de tipo CONTINUE, BREAK, RETORNO 
+                    if( ins instanceof Detener || res instanceof Detener){
+                        controlador.graficarEntornos(controlador,ts_local," (While)");
+                       return null;
+                    }else{
+                        if(ins instanceof Continuar || res instanceof Continuar){
+                            break;
+                        }else{
+                            if( ins instanceof retornar || res instanceof retornar){
+                                controlador.graficarEntornos(controlador,ts_local," (While)");
+                                return res;
+                            }
+                        }
+                    }
+
                 }
                 controlador.graficarEntornos(controlador,ts_local," (While)");
             }
@@ -38,7 +54,17 @@ export default class While implements Instruccion{
     }
     
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("CICLO","");
+        padre.AddHijo(new Nodo("while",""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(this.condicion.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+        padre.AddHijo(new Nodo("{",""));
+        for(let ins of this.lista_instrucciones){
+            padre.AddHijo(ins.recorrer());
+        }
+        padre.AddHijo(new Nodo("}",""));
+        return padre;
     }
 
 } 
