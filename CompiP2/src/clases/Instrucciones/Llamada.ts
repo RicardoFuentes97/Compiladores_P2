@@ -53,11 +53,10 @@ export default class Llamada implements Instruccion, Expreciones{
                     let error = new Errores('Semantico', `Break y Continue solo son para ciclos`, this.linea, this.columna);
                     controlador.errores.push(error);
                     controlador.append(`Error Semantico : Break y Continue solo son para ciclos. En la linea ${this.linea} y columan ${this.columna}`);
-                
                     return null;
                 }
                 if( r !=null){
-                    
+
                     return r;
                 }
             }
